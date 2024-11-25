@@ -11,6 +11,7 @@ package appKasirLaundry;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 
 public class appKasirISL extends javax.swing.JFrame {
 
@@ -176,12 +177,13 @@ public class appKasirISL extends javax.swing.JFrame {
 
         jLabel11.setText("Berat                         :");
 
-        jLabel12.setText("Harga  (kg             :");
+        jLabel12.setText("Harga  (kg)             :");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("KASIR LAUNDRY");
 
-        jLabel2.setText("(NAMA LANDRY)");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setText("ISL");
 
         jLabel3.setText("Jl. Bendungan Siguragura No. 31D ");
 
@@ -209,13 +211,10 @@ public class appKasirISL extends javax.swing.JFrame {
 
         tabelDataKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "ID Pelanggan", "Nama Pengguna", "No Telepon", "Alamat", "Jenis Layanan", "Jenis Barang", "Berat", "Harga", "Jenis Parfum", "Total Bayar"
+                "ID Pelanggan", "Nama Pengguna", "No Telepon", "Alamat", "Jenis Layanan", "Jenis Barang", "Berat", "Harga(kg)", "Jenis Parfum", "Total Bayar"
             }
         ));
         tabelDataKasir.setShowHorizontalLines(true);
@@ -295,11 +294,7 @@ public class appKasirISL extends javax.swing.JFrame {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addGap(32, 32, 32)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(6, 6, 6)
-                                                    .addComponent(jLabel2))
-                                                .addComponent(jLabel1)))
+                                            .addComponent(jLabel1))
                                         .addGroup(layout.createSequentialGroup()
                                             .addGap(36, 36, 36)
                                             .addComponent(jLabel4))
@@ -309,8 +304,12 @@ public class appKasirISL extends javax.swing.JFrame {
                                 .addComponent(hapusData)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(hapusDataAll)))
-                        .addGap(0, 372, Short.MAX_VALUE)))
+                        .addGap(0, 486, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(258, 258, 258)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,7 +322,7 @@ public class appKasirISL extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(id_pelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -365,12 +364,12 @@ public class appKasirISL extends javax.swing.JFrame {
                     .addComponent(jLabel15)
                     .addComponent(totalPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(hapusData)
                     .addComponent(hapusDataAll))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
 
         pack();
@@ -446,8 +445,40 @@ public class appKasirISL extends javax.swing.JFrame {
         // Menghitung total pembayaran
         int totalBayar = (hargaPerKg * berat) + hargaParfum;
         totalPembayaran.setText(String.valueOf(totalBayar)); // Menampilkan total pembayaran
-        
-        
+
+        // Membuat ID Pelanggan baru berdasarkan counter
+        String idPelanggan = "KL-ISL" + String.format("%04d", idCounter);
+        idCounter++; // Menambah counter ID pelanggan
+
+        // Menampilkan popup dengan hasil perhitungan
+        JOptionPane.showMessageDialog(this,
+                "ID Pelanggan: " + idPelanggan
+                + "\nNama Pelanggan: " + namaPelanggan.getText()
+                + "\nNo Telepon: " + noTelepon.getText()
+                + "\nAlamat: " + alamat.getText()
+                + "\nJenis Layanan: " + layanan
+                + "\nJenis Barang: " + barang
+                + "\nBerat: " + berat + " kg"
+                + "\nHarga per Kg: " + hargaPerKg
+                + "\nJenis Parfum: " + parfum
+                + "\nTotal Pembayaran: " + totalBayar,
+                "Hasil Perhitungan", JOptionPane.INFORMATION_MESSAGE);
+
+        // Tambahkan data ke tabel
+        DefaultTableModel model = (DefaultTableModel) tabelDataKasir.getModel();
+        model.addRow(new Object[]{
+            idPelanggan, // ID Pelanggan
+            namaPelanggan.getText(), // Nama Pelanggan
+            noTelepon.getText(), // No Telepon
+            alamat.getText(), // Alamat
+            layanan, // Jenis Layanan
+            barang, // Jenis Barang
+            berat, // Berat
+            hargaPerKg, // Harga (kg)
+            parfum, // Jenis Parfum
+            totalPembayaran.getText() // Total Bayar
+        });
+
     }//GEN-LAST:event_hitungActionPerformed
 
     private void alamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alamatActionPerformed
@@ -476,10 +507,19 @@ public class appKasirISL extends javax.swing.JFrame {
 
     private void hapusDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusDataActionPerformed
         // TODO add your handling code here:
+        int selectedRow = tabelDataKasir.getSelectedRow();
+        if (selectedRow != -1) {
+            DefaultTableModel model = (DefaultTableModel) tabelDataKasir.getModel();
+            model.removeRow(selectedRow);
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!");
+        }
     }//GEN-LAST:event_hapusDataActionPerformed
 
     private void hapusDataAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusDataAllActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tabelDataKasir.getModel();
+        model.setRowCount(0); // Menghapus semua data di tabel
     }//GEN-LAST:event_hapusDataAllActionPerformed
 
     private void BeratStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_BeratStateChanged
