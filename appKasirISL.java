@@ -9,13 +9,13 @@ package appKasirLaundry;
  * @author HP
  */
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+//import javax.swing.event.ChangeEvent;
+//import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 public class appKasirISL extends javax.swing.JFrame {
 
-    private static int idCounter = 1; // Counter untuk ID pelanggan otomatis
+    int idCounter = 1; // Counter untuk ID pelanggan otomatis
 
     /**
      * Creates new form appKasirISL
@@ -29,7 +29,7 @@ public class appKasirISL extends javax.swing.JFrame {
     }
 
     private void generateIdPelanggan() {
-        id_pelanggan.setText("KL-ISL" + String.format("%04d", idCounter++)); // Format ID jadi PLG0001, PLG0002, dst.   
+        id_pelanggan.setText("KL-ISL" + String.format("%04d", idCounter)); // Format ID jadi KLS0001, dst.   
         id_pelanggan.setEditable(false); // ID pelanggan tidak bisa diubah
     }
 
@@ -37,8 +37,8 @@ public class appKasirISL extends javax.swing.JFrame {
         // Pendekatan menggunakan KeyListener
         noTelepon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                char c = evt.getKeyChar();
-                if (!Character.isDigit(c)) {
+                char angka = evt.getKeyChar();
+                if (!Character.isDigit(angka)) {
                     evt.consume(); // Batalkan input jika bukan angka
                 }
             }
@@ -56,10 +56,10 @@ public class appKasirISL extends javax.swing.JFrame {
         jenisBarang.addItem("Selimut");
         jenisBarang.addItem("Jas");
 
+        jenisParfum.addItem("-");
         jenisParfum.addItem("Lavender");
         jenisParfum.addItem("Mawar");
         jenisParfum.addItem("Jeruk");
-        jenisParfum.addItem("Tanpa Parfum");
     }
 
     private void setupBeratSpinner() {
@@ -67,16 +67,22 @@ public class appKasirISL extends javax.swing.JFrame {
         SpinnerNumberModel beratModel = new SpinnerNumberModel(1, 1, 50, 1);
         Berat.setModel(beratModel);
 
+        // Nonaktifkan kemampuan mengetik manual
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) Berat.getEditor();
+        editor.getTextField().setEditable(false); // Membuat text field tidak bisa diedit
+
         // Listener untuk memastikan nilai tidak kurang dari 1
-        Berat.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                int value = (int) Berat.getValue();
-                if (value < 1) {
-                    Berat.setValue(1); // Tetapkan nilai minimum ke 1
-                }
-            }
-        });
+//        SpinnerNumberModel model = new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
+//Berat = new JSpinner(model);
+//        Berat.addChangeListener(new ChangeListener() {
+//            @Override
+//            public void stateChanged(ChangeEvent e) {
+//                int value = (int) Berat.getValue();
+//                if (value < 1) {
+//                    Berat.setValue(1); // Tetapkan nilai minimum ke 1
+//                }
+//            }
+//        });
     }
 
     /**
@@ -100,7 +106,7 @@ public class appKasirISL extends javax.swing.JFrame {
         jenisLayanan = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jenisBarang = new javax.swing.JComboBox<>();
-        totalPembayaran = new javax.swing.JTextField();
+        totalBayarJ = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -117,17 +123,32 @@ public class appKasirISL extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelDataKasir = new javax.swing.JTable();
         hapusData = new javax.swing.JButton();
+        totalHargaJ = new javax.swing.JTextField();
         hapusDataAll = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        totalDiskon = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        BG = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        totalPembayaran1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         jLabel14.setText("(kg)");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(610, 313, 42, 16);
 
+        harga.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         harga.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hargaActionPerformed(evt);
             }
         });
+        getContentPane().add(harga);
+        harga.setBounds(355, 422, 110, 20);
 
         hitung.setText("Hitung");
         hitung.addActionListener(new java.awt.event.ActionListener() {
@@ -135,91 +156,163 @@ public class appKasirISL extends javax.swing.JFrame {
                 hitungActionPerformed(evt);
             }
         });
+        getContentPane().add(hitung);
+        hitung.setBounds(427, 381, 72, 23);
 
+        Berat.setBorder(null);
         Berat.setVerifyInputWhenFocusTarget(false);
         Berat.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 BeratStateChanged(evt);
             }
         });
+        getContentPane().add(Berat);
+        Berat.setBounds(355, 310, 249, 20);
 
-        jLabel7.setText("No Telepon           :");
+        jLabel7.setText("No Telepon                :");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(220, 180, 130, 16);
 
+        alamat.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         alamat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 alamatActionPerformed(evt);
             }
         });
+        getContentPane().add(alamat);
+        alamat.setBounds(355, 214, 249, 20);
 
-        jLabel8.setText("Alamat                   :");
+        jLabel8.setText("Alamat                        :");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(220, 220, 130, 16);
 
+        noTelepon.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         noTelepon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 noTeleponActionPerformed(evt);
             }
         });
+        getContentPane().add(noTelepon);
+        noTelepon.setBounds(355, 180, 249, 20);
 
-        jLabel9.setText("Jenis Layanan        :");
+        jLabel9.setText("Jenis Layanan          :");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(220, 250, 130, 16);
 
-        jLabel10.setText("Jenis Barang          :");
+        jenisLayanan.setBorder(null);
+        getContentPane().add(jenisLayanan);
+        jenisLayanan.setBounds(355, 242, 249, 20);
 
+        jLabel10.setText("Jenis Barang            :");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(220, 280, 130, 16);
+
+        jenisBarang.setBorder(null);
         jenisBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jenisBarangActionPerformed(evt);
             }
         });
+        getContentPane().add(jenisBarang);
+        jenisBarang.setBounds(355, 276, 249, 20);
 
-        totalPembayaran.addActionListener(new java.awt.event.ActionListener() {
+        totalBayarJ.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        totalBayarJ.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                totalPembayaranActionPerformed(evt);
+                totalBayarJActionPerformed(evt);
             }
         });
+        getContentPane().add(totalBayarJ);
+        totalBayarJ.setBounds(640, 460, 120, 20);
 
-        jLabel11.setText("Berat                         :");
+        jLabel11.setText("Berat                           :");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(220, 310, 130, 16);
 
-        jLabel12.setText("Harga  (kg)             :");
+        jLabel12.setText("Harga  (kg)                :");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(220, 430, 130, 16);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("KASIR LAUNDRY");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(441, 12, 110, 20);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("ISL");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(491, 38, 17, 16);
 
         jLabel3.setText("Jl. Bendungan Siguragura No. 31D ");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(409, 60, 230, 16);
 
-        jLabel4.setText("HP : 085697953213");
+        jLabel4.setText("HP : 0892381782109");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(449, 82, 170, 16);
 
-        jLabel5.setText("ID Pelanggan :");
+        jLabel5.setText("ID Pelanggan            :");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(220, 110, 130, 16);
 
+        namaPelanggan.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         namaPelanggan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 namaPelangganActionPerformed(evt);
             }
         });
+        getContentPane().add(namaPelanggan);
+        namaPelanggan.setBounds(360, 150, 240, 20);
 
-        jLabel6.setText("Nama Pelanggan :");
+        jLabel6.setText("Nama Pelanggan     :");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(220, 150, 120, 16);
 
+        id_pelanggan.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        id_pelanggan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         id_pelanggan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 id_pelangganActionPerformed(evt);
             }
         });
+        getContentPane().add(id_pelanggan);
+        id_pelanggan.setBounds(355, 110, 249, 22);
 
         jLabel15.setText("Total Pembayaran         :");
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(490, 460, 180, 16);
 
-        jLabel13.setText("Jenis Parfum           :");
+        jLabel13.setText("Jenis Parfum            :");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(220, 350, 130, 16);
 
+        jenisParfum.setBorder(null);
+        getContentPane().add(jenisParfum);
+        jenisParfum.setBounds(355, 347, 249, 20);
+
+        tabelDataKasir.setAutoCreateRowSorter(true);
+        tabelDataKasir.setBackground(new java.awt.Color(102, 204, 255));
         tabelDataKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Pelanggan", "Nama Pengguna", "No Telepon", "Alamat", "Jenis Layanan", "Jenis Barang", "Berat", "Harga(kg)", "Jenis Parfum", "Total Bayar"
+                "ID Pelanggan", "Nama Pengguna", "No Telepon", "Alamat", "Jenis Layanan", "Jenis Barang", "Berat", "Harga(kg)", "Jenis Parfum", "Diskon", "Total Bayar", "Setelah Diskon "
             }
         ));
-        tabelDataKasir.setShowHorizontalLines(true);
-        tabelDataKasir.setShowVerticalLines(true);
+        tabelDataKasir.setCellSelectionEnabled(true);
+        tabelDataKasir.setSelectionBackground(new java.awt.Color(51, 0, 102));
+        tabelDataKasir.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        tabelDataKasir.setShowGrid(true);
+        tabelDataKasir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tabelDataKasirKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabelDataKasir);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 510, 1080, 78);
 
         hapusData.setText("Hapus Data");
         hapusData.addActionListener(new java.awt.event.ActionListener() {
@@ -227,6 +320,16 @@ public class appKasirISL extends javax.swing.JFrame {
                 hapusDataActionPerformed(evt);
             }
         });
+        getContentPane().add(hapusData);
+        hapusData.setBounds(30, 590, 130, 23);
+
+        totalHargaJ.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalHargaJActionPerformed(evt);
+            }
+        });
+        getContentPane().add(totalHargaJ);
+        totalHargaJ.setBounds(640, 420, 120, 22);
 
         hapusDataAll.setText("Bersihkan JFrame");
         hapusDataAll.addActionListener(new java.awt.event.ActionListener() {
@@ -234,143 +337,51 @@ public class appKasirISL extends javax.swing.JFrame {
                 hapusDataAllActionPerformed(evt);
             }
         });
+        getContentPane().add(hapusDataAll);
+        hapusDataAll.setBounds(170, 590, 160, 23);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(7, 7, 7)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel6)
-                                                        .addComponent(jLabel5)))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(2, 2, 2)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(jLabel12)
-                                                            .addComponent(jLabel13))
-                                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
-                                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(id_pelanggan, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(namaPelanggan, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(noTelepon, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(alamat, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jenisLayanan, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jenisBarang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(harga, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(39, 39, 39)
-                                                .addComponent(jLabel15)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(totalPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(Berat)
-                                                    .addComponent(jenisParfum, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(189, 189, 189)
-                                        .addComponent(hitung)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(32, 32, 32)
-                                            .addComponent(jLabel1))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(36, 36, 36)
-                                            .addComponent(jLabel4))
-                                        .addComponent(jLabel3))
-                                    .addGap(150, 150, 150)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(hapusData)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(hapusDataAll)))
-                        .addGap(0, 486, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(258, 258, 258)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(id_pelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(namaPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(noTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(alamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jenisLayanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jenisBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel14)
-                    .addComponent(Berat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jenisParfum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(hitung)
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(harga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15)
-                    .addComponent(totalPembayaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hapusData)
-                    .addComponent(hapusDataAll))
-                .addContainerGap(167, Short.MAX_VALUE))
-        );
+        jLabel16.setText("Total Diskon             :");
+        getContentPane().add(jLabel16);
+        jLabel16.setBounds(220, 460, 130, 16);
+
+        totalDiskon.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        totalDiskon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalDiskonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(totalDiskon);
+        totalDiskon.setBounds(355, 456, 110, 20);
+
+        jLabel20.setText("Total Harga                    :");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(490, 420, 170, 16);
+
+        BG.setBackground(new java.awt.Color(102, 204, 255));
+        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/appKasirLaundry/gamabr.png"))); // NOI18N
+        getContentPane().add(BG);
+        BG.setBounds(-120, -10, 1240, 630);
+
+        jLabel17.setText("Total Pembayaran         :");
+        getContentPane().add(jLabel17);
+        jLabel17.setBounds(517, 459, 160, 16);
+
+        jLabel18.setText("Total Pembayaran         :");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(517, 459, 160, 16);
+
+        jLabel19.setText("Total Pembayaran         :");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(517, 459, 160, 16);
+
+        totalPembayaran1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        totalPembayaran1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalPembayaran1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(totalPembayaran1);
+        totalPembayaran1.setBounds(660, 460, 120, 20);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -381,6 +392,17 @@ public class appKasirISL extends javax.swing.JFrame {
 
     private void hitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hitungActionPerformed
         // TODO add your handling code here:
+
+        // Validasi input
+        if (namaPelanggan.getText().trim().isEmpty()
+                || noTelepon.getText().trim().isEmpty()
+                || alamat.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Harap isi semua data terlebih dahulu!",
+                    "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return; // Menghentikan eksekusi jika ada input yang kosong
+        }
         // Mendapatkan pilihan dari combo box
         String layanan = (String) jenisLayanan.getSelectedItem();
         String barang = (String) jenisBarang.getSelectedItem();
@@ -433,52 +455,72 @@ public class appKasirISL extends javax.swing.JFrame {
             case "Jeruk":
                 hargaParfum = 1000;
                 break;
-            case "Tanpa Parfum":
-                hargaParfum = 0;
+            default:
+                hargaParfum = 0; // Harga 0 jika parfum tidak dipilih
                 break;
         }
 
         // Menghitung total harga per kilogram
         int hargaPerKg = hargaLayanan + hargaBarang;
-        harga.setText(String.valueOf(hargaPerKg)); // Menampilkan harga per kilogram di input Harga(kg)
+        int totalHargaKg = (hargaPerKg * berat);
+        harga.setText(String.valueOf(totalHargaKg)); // Menampilkan harga per kilogram dxi input Harga(kg)
 
-        // Menghitung total pembayaran
-        int totalBayar = (hargaPerKg * berat) + hargaParfum;
-        totalPembayaran.setText(String.valueOf(totalBayar)); // Menampilkan total pembayaran
+        // Menghitung total pembayaran sebelum diskon
+        int totalHarga = (hargaPerKg * berat) + hargaParfum;
+        totalHargaJ.setText(String.valueOf(totalHarga));
+
+        // Menghitung total Diskon (hanya 10% dari totalBayar jika > 100000)
+        int diskon = 0;
+        if (totalHarga > 100000) {
+            diskon = totalHarga * 10 / 100; // Diskon 10%   
+        }
+        totalDiskon.setText(String.valueOf(diskon)); // Menampilkan total diskon saja
+
+        // Menghitung total pembayaran setelah diskon
+        int totalBayar = totalHarga - diskon;
+        totalBayarJ.setText(String.valueOf(totalBayar)); // Menampilkan total pembayaran setelah diskon
 
         // Membuat ID Pelanggan baru berdasarkan counter
-        String idPelanggan = "KL-ISL" + String.format("%04d", idCounter);
-        idCounter++; // Menambah counter ID pelanggan
+        String idPelanggan = "KL-ISL" + String.format("%04d", idCounter++);
 
         // Menampilkan popup dengan hasil perhitungan
         JOptionPane.showMessageDialog(this,
-                "ID Pelanggan: " + idPelanggan
-                + "\nNama Pelanggan: " + namaPelanggan.getText()
-                + "\nNo Telepon: " + noTelepon.getText()
-                + "\nAlamat: " + alamat.getText()
-                + "\nJenis Layanan: " + layanan
-                + "\nJenis Barang: " + barang
-                + "\nBerat: " + berat + " kg"
-                + "\nHarga per Kg: " + hargaPerKg
-                + "\nJenis Parfum: " + parfum
-                + "\nTotal Pembayaran: " + totalBayar,
+                "ID Pelanggan  : " + idPelanggan
+                + "\nNama Pelanggan  : " + namaPelanggan.getText()
+                + "\nNo Telepon  : " + noTelepon.getText()
+                + "\nAlamat  : " + alamat.getText()
+                + "\nJenis Layanan  : " + layanan
+                + "\nJenis Barang  : " + barang
+                + "\nBerat  : " + berat + " kg"
+                + "\nHarga per Kg  : Rp " + hargaPerKg
+                + "\nJenis Parfum  : " + parfum
+                + "\nTotal Diskon  : Rp " + diskon
+                + "\nTotal Harga  : Rp " + totalHarga
+                + "\nTotal Bayar  : Rp " + totalBayar,
                 "Hasil Perhitungan", JOptionPane.INFORMATION_MESSAGE);
 
         // Tambahkan data ke tabel
         DefaultTableModel model = (DefaultTableModel) tabelDataKasir.getModel();
         model.addRow(new Object[]{
-            idPelanggan, // ID Pelanggan
-            namaPelanggan.getText(), // Nama Pelanggan
-            noTelepon.getText(), // No Telepon
-            alamat.getText(), // Alamat
-            layanan, // Jenis Layanan
-            barang, // Jenis Barang
-            berat, // Berat
-            hargaPerKg, // Harga (kg)
-            parfum, // Jenis Parfum
-            totalPembayaran.getText() // Total Bayar
+            idPelanggan, namaPelanggan.getText(), noTelepon.getText(), alamat.getText(),
+            layanan, barang, berat, hargaPerKg, parfum, diskon, totalHarga, totalBayar
         });
 
+        // Update ID pelanggan di label setelah menambah data
+        id_pelanggan.setText("KL-ISL" + String.format("%04d", idCounter)); // Update ID di label
+
+        // Reset form input
+        namaPelanggan.setText(""); // Reset Nama Pelanggan
+        noTelepon.setText(""); // Reset No Telepon
+        alamat.setText(""); // Reset Alamat
+        jenisLayanan.setSelectedIndex(0); // Reset ComboBox Jenis Layanan
+        jenisBarang.setSelectedIndex(0); // Reset ComboBox Jenis Barang
+        jenisParfum.setSelectedIndex(0); // Reset ComboBox Jenis Parfum
+        Berat.setValue(1); // Reset Spinner Berat
+        harga.setText(""); // Reset Harga
+        totalHargaJ.setText(""); // Reset Harga
+        totalDiskon.setText(""); // Reset Total Diskon
+        totalBayarJ.setText(""); // Reset Total Pembayaran
     }//GEN-LAST:event_hitungActionPerformed
 
     private void alamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alamatActionPerformed
@@ -493,9 +535,9 @@ public class appKasirISL extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jenisBarangActionPerformed
 
-    private void totalPembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalPembayaranActionPerformed
+    private void totalBayarJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalBayarJActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_totalPembayaranActionPerformed
+    }//GEN-LAST:event_totalBayarJActionPerformed
 
     private void namaPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namaPelangganActionPerformed
         // TODO add your handling code here:
@@ -525,6 +567,22 @@ public class appKasirISL extends javax.swing.JFrame {
     private void BeratStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_BeratStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_BeratStateChanged
+
+    private void totalDiskonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalDiskonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_totalDiskonActionPerformed
+
+    private void totalPembayaran1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalPembayaran1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_totalPembayaran1ActionPerformed
+
+    private void totalHargaJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalHargaJActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_totalHargaJActionPerformed
+
+    private void tabelDataKasirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tabelDataKasirKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelDataKasirKeyPressed
 
     /**
      * @param args the command line arguments
@@ -562,6 +620,7 @@ public class appKasirISL extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BG;
     private javax.swing.JSpinner Berat;
     private javax.swing.JTextField alamat;
     private javax.swing.JButton hapusData;
@@ -576,7 +635,12 @@ public class appKasirISL extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -591,6 +655,9 @@ public class appKasirISL extends javax.swing.JFrame {
     private javax.swing.JTextField namaPelanggan;
     private javax.swing.JTextField noTelepon;
     private javax.swing.JTable tabelDataKasir;
-    private javax.swing.JTextField totalPembayaran;
+    private javax.swing.JTextField totalBayarJ;
+    private javax.swing.JTextField totalDiskon;
+    private javax.swing.JTextField totalHargaJ;
+    private javax.swing.JTextField totalPembayaran1;
     // End of variables declaration//GEN-END:variables
 }
